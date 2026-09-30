@@ -10,13 +10,14 @@ import { redirect } from 'next/navigation';
 import Modal from '@/components/Modal';
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 const ProductDetails = async ({ params }: Props) => {
-  const product: Product = await getProductById(params.id);
+  const { id } = await params;
+  const product: Product = await getProductById(id);
 
   if (!product) redirect('/');
-  const similarProducts = await getSimilarProducts(params.id);
+  const similarProducts = await getSimilarProducts(id);
   return (
     <div className='product-container'>
       <div className='flex gap-28 xl:flex-row flex-col'>
