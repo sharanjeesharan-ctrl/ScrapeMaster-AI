@@ -1,5 +1,6 @@
 import Product from "@/lib/models/product.model";
 import { connectDB } from "@/lib/mogoose";
+import { scrapeAmazonProduct } from "@/lib/scrapper";
 import { generateEmailBody, sendEmail } from "@/lib/nodemailer";
 import { getAveragePrice, getEmailNotifType, getHighestPrice, getLowestPrice } from "@/lib/utils";
 import { NextResponse } from "next/server";
@@ -17,12 +18,12 @@ export async function GET() {
 
         const updatedProducts = await Promise.all(
             products.map(async (currentProduct) => {
-                const scrappedProduct = await currentProduct.scrapping(currentProduct.url);
+                const scrappedProduct = (await scrapeAmazonProduct(currentProduct.url)) as any;
                 if (!scrappedProduct) throw new Error("No product found");
 
                 const updatedPriceHistory = [
                     ...currentProduct.priceHistory,
-                    { price: scrappedProduct.currentPrice },
+                    { price: scrappedProduct.currentPrice, date: new Date() },
                 ];
 
                 const product = {
@@ -35,10 +36,11 @@ export async function GET() {
 
                 const updatedProduct = await Product.findOneAndUpdate(
                     { url: product.url },
-                    product
+                    product,
+                    { new: true }
                 );
 
-                const emailNotification = getEmailNotifType(scrappedProduct, currentProduct);
+                const emailNotification = getEmailNotifType(scrappedProduct, currentProduct as any);
 
                 if (emailNotification && updatedProduct.users.length > 0) {
                     const productInfo = {
