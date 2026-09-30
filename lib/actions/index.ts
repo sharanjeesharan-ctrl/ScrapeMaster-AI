@@ -60,3 +60,43 @@ export async function getAllProducts() {
         throw new Error(`Failed to get products: ${error.message}`);
     }
 }
+
+export async function getProductById(productId: string) {
+    try {
+        await connectDB();
+        const product = await Product.findOne({ _id: productId });
+        if (!product) return null;
+        return JSON.parse(JSON.stringify(product));
+    } catch (error: any) {
+        console.log(error);
+        return null;
+    }
+}
+
+export async function getSimilarProducts(productId: string) {
+    try {
+        await connectDB();
+        const currentProduct = await Product.findById(productId);
+        if (!currentProduct) return null;
+        const similarProducts = await Product.find({ _id: { $ne: productId } }).limit(3);
+        return JSON.parse(JSON.stringify(similarProducts));
+    } catch (error: any) {
+        console.log(error);
+        return null;
+    }
+}
+
+export async function addUserEmailToProduct(productId: string, userEmail: string) {
+    try {
+        await connectDB();
+        const product = await Product.findById(productId);
+        if (!product) return;
+        const userExists = product.users.some((user: { email: string }) => user.email === userEmail);
+        if (!userExists) {
+            product.users.push({ email: userEmail });
+            await product.save();
+        }
+    } catch (error: any) {
+        console.log(error);
+    }
+}
