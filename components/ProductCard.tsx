@@ -3,8 +3,8 @@ import Link from 'next/link';
 import React from 'react';
 
 interface Product {
-  _id: string;
-  id: string;
+  _id?: string;
+  id?: string;
   image: string;
   title: string;
   category: string;
