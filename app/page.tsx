@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { getAllProducts } from '@/lib/actions';
 import ProductCard from '@/components/ProductCard';
 
+export const dynamic = 'force-dynamic';
+
 const Home = async () => {
   const allProducts = await getAllProducts();
 
