@@ -141,7 +141,7 @@ const ProductDetails = async ({ params }: Props) => {
             />
           </div>
         </div>
-        <Modal productId={params.id} />
+        <Modal productId={id} />
       </div>
       <div className='flex flex-col gap-16'>
         <div className='flex flex-col gap-5'>
@@ -171,7 +171,7 @@ const ProductDetails = async ({ params }: Props) => {
           <p className='section-text'>Similar Products</p>
           <div className='flex gap-4 flex-wrap'>
             {similarProducts.map((product: Product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
         </div>
