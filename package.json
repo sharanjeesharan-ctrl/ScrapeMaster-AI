@@ -13,10 +13,10 @@
     "axios": "^1.7.9",
     "cheerio": "^1.0.0",
     "mongoose": "^8.8.3",
-    "next": "15.0.3",
+    "next": "15.1.12",
     "nodemailer": "^6.9.16",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
     "react-responsive-carousel": "^3.2.23"
   },
   "devDependencies": {
